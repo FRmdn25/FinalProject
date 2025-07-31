@@ -34,4 +34,5 @@ jobs:
       run: chmod +x gradlew
 
     - name: Run UI Tests
-      run: ./gradlew clean test --tests * --info -Dcucumber.filter.tags="@ui"
+      run: ./gradlew clean test --info -Dcucumber.filter.tags="@ui"
+
