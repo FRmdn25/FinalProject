@@ -8,7 +8,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.File;
 import java.time.Duration;
-import java.util.Random;
 
 public class Utility {
 
@@ -19,19 +18,18 @@ public class Utility {
     }
 
     public static String generateRandomEmail() {
-        String allowedChars = "abcdefghijklmnopqrstuvwxyz" + "123456789" + "_-.";
-        String email = "";
         String temp = RandomStringUtils.randomAlphanumeric(10);
-        email = temp + "@testdata.com";
-        return email;
+        return temp + "@testdata.com";
     }
 
     public static void startDriver() {
         ChromeOptions options = new ChromeOptions();
-//      options.addArguments("--headless");
+        options.addArguments("--headless"); // ✅ Aktifkan headless
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--disable-gpu");
         options.addArguments("--remote-allow-origins=*");
+
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver(options);
         driver.manage().window().maximize();
@@ -39,6 +37,9 @@ public class Utility {
     }
 
     public static void quitDriver() {
-        driver.quit();
+        if (driver != null) {
+            driver.quit();
+            driver = null;
+        }
     }
 }
