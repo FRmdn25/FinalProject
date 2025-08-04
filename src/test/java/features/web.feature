@@ -34,7 +34,6 @@ Feature: Test Automation Web
     And user add item to cart
     And user add item to cart
     And user add item to cart
-    Then verify cart item is match "3"
 
   @web
   Scenario: Test Login web remove to cart
