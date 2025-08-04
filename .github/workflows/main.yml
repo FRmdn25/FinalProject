@@ -1,27 +1,3 @@
-
-Skip to content
-Navigation Menu
-ramdhaniwijatniko
-jj-final-project
-
-Code
-Issues
-Pull requests
-Actions
-Projects
-Security
-
-    Insights
-
-Run Automation Tests
-Merge pull request #2 from rizqifauzan/main #58
-
-Jobs
-
-Run details
-
-Workflow file for this run
-.github/workflows/main.yml at f00ee7e
 name: Run Automation Tests
 
 on:
