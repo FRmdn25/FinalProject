@@ -1,22 +1,29 @@
 package stepDef;
 
 import io.cucumber.java.*;
-import helper.Utility;
+
+import static helper.Utility.quitDriver;
+import static helper.Utility.startDriver;
 
 public class Hooks {
 
+    @BeforeAll
+    public static void setUp() {
+    }
+
+    @AfterAll
+    public static void tearDown() {
+    }
+
     @Before
-    public void beforeTest(Scenario scenario) {
-        if (scenario.getSourceTagNames().contains("@web")) {
-            Utility.startDriver();
-        }
+    public static void beforeTest() {
+        startDriver();
     }
 
     @After
-    public void afterTest(Scenario scenario) throws InterruptedException {
-        if (scenario.getSourceTagNames().contains("@web")) {
-            Thread.sleep(3000); // Optional delay if needed for debugging
-            Utility.quitDriver();
-        }
+    public static void afterTest() throws InterruptedException {
+       Thread.sleep(3000);
+        quitDriver();
     }
+
 }
