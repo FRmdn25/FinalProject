@@ -14,30 +14,34 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testImplementation 'org.junit.vintage:junit-vintage-engine:5.7.2'
 
-    implementation group: 'io.cucumber', name: 'cucumber-java', version: '7.12.0'
-    testImplementation group: 'io.cucumber', name: 'cucumber-junit', version: '7.12.0'
+    implementation 'io.cucumber:cucumber-java:7.12.0'
+    testImplementation 'io.cucumber:cucumber-junit:7.12.0'
 
-    testImplementation group: 'io.rest-assured', name: 'rest-assured', version: '5.3.0'
-    testImplementation group: 'org.json', name: 'json', version: '20220924'
+    testImplementation 'io.rest-assured:rest-assured:5.3.0'
     testImplementation 'io.rest-assured:json-path:5.3.0'
-    testImplementation group: 'io.rest-assured', name: 'json-schema-validator', version: '5.3.0'
-    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.24.0'
+    testImplementation 'io.rest-assured:json-schema-validator:5.3.0'
+    testImplementation 'org.json:json:20220924'
+    testImplementation 'org.assertj:assertj-core:3.24.0'
 
-    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.10.0'
-    testImplementation("io.github.bonigarcia:webdrivermanager:5.4.1")
+    implementation 'org.seleniumhq.selenium:selenium-java:4.10.0'
+    testImplementation 'io.github.bonigarcia:webdrivermanager:5.4.1'
 }
 
 test {
     useJUnitPlatform()
     systemProperty "cucumber.filter.tags", System.getProperty("cucumber.filter.tags")
 }
+
 configurations {
     cucumberRuntime {
         extendsFrom testImplementation
     }
 }
 
+// ✅ Task untuk menjalankan API Test
 tasks.register('apiTest') {
+    group = "verification"
+    description = "Run API cucumber tests"
     dependsOn assemble, testClasses
     doLast {
         javaexec {
@@ -45,10 +49,31 @@ tasks.register('apiTest') {
             classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
             args = [
                     '--plugin', 'pretty',
-                    '--plugin', 'html:reports/cucumber-api-report.html',
+                    '--plugin', 'html:build/reports/tests/apiTest', // ✅ penting untuk GitHub Actions
                     '--glue', 'stepDef',
                     '--tags', "@api",
-                    'src/test/java/features' ]
+                    'src/test/java/features'
+            ]
+        }
+    }
+}
+
+// ✅ Task untuk menjalankan Web UI Test
+tasks.register('webTest') {
+    group = "verification"
+    description = "Run Web UI cucumber tests"
+    dependsOn assemble, testClasses
+    doLast {
+        javaexec {
+            main = "io.cucumber.core.cli.Main"
+            classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+            args = [
+                    '--plugin', 'pretty',
+                    '--plugin', 'html:build/reports/tests/webTest', // ✅ simpan di lokasi yang bisa di-upload
+                    '--glue', 'stepDef',
+                    '--tags', "@web",
+                    'src/test/java/features'
+            ]
         }
     }
 }
