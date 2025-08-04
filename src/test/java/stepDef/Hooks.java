@@ -1,22 +1,20 @@
 package stepDef;
 
-import io.cucumber.java.*;
+import io.cucumber.java.Before;
+import io.cucumber.java.After;
 import static helper.Utility.*;
 
 public class Hooks {
 
-    @Before
-    public void beforeTest(Scenario scenario) {
-        if (scenario.getSourceTagNames().contains("@web")) {
-            startDriver();
-        }
+    @Before("@web")  // hanya jalan untuk scenario yang pakai tag @web
+    public void beforeScenario() {
+        System.out.println("=== Starting WebDriver ===");
+        startDriver(); // ini dari Utility, inisialisasi driver
     }
 
-    @After
-    public void afterTest(Scenario scenario) throws InterruptedException {
-        if (scenario.getSourceTagNames().contains("@web")) {
-            Thread.sleep(3000);
-            quitDriver();
-        }
+    @After("@web")   // hanya jalan untuk scenario yang pakai tag @web
+    public void afterScenario() {
+        System.out.println("=== Quitting WebDriver ===");
+        quitDriver();  // stop driver dan bersihkan
     }
 }
